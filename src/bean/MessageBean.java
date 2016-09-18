@@ -1,9 +1,9 @@
 package bean;
 
-import java.io.File;
+import java.io.Serializable;
 
-public class MessageBean extends UserInfoBean {
-
+public class MessageBean implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private long messageId;// 消息id
 	private long groupId;// 群id
 	private boolean isGoup;// 是否是群消息
@@ -11,7 +11,26 @@ public class MessageBean extends UserInfoBean {
 	private String content;// 文本消息内容
 	private String errorMsg;// 错误信息
 	private int errorCode;// 错误代码
+	private int userId;//用户id
+	private int friendId;//目标好友id
 	private MessageFileBean chatFile;// 消息附件
+
+	
+	public int getFriendId() {
+		return friendId;
+	}
+
+	public void setFriendId(int friendId) {
+		this.friendId = friendId;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 
 	public long getMessageId() {
 		return messageId;

@@ -3,13 +3,13 @@ package bean;
 import java.io.Serializable;
 
 public class MessageFileBean implements Serializable {
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 	private int fileId;//文件id
-	private String fileName;//文件�?
+	private String fileName;//文件名称
 	private long fileLength;//文件长度
 	private Byte[] fileByte;//文件内容
 	private String fileType;//文件类型
-	private String fileTitle;//文件头名�?
+	private String fileTitle;//文件头名称
 	public int getFileId() {
 		return fileId;
 	}

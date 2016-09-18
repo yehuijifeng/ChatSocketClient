@@ -3,13 +3,13 @@ package bean;
 import java.io.Serializable;
 
 public class UserInfoBean implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	private long userId;// 用户id
 	private String userName;// 用户名
 	private String likeName;// 昵称
 	private String userPwd;// 用户密码
 	private String userIcon;// 用户头像
-
+	
 	public long getUserId() {
 		return userId;
 	}
