@@ -22,6 +22,7 @@ import com.google.gson.JsonObject;
 import com.socket.chat.SocketUrls;
 
 import bean.MessageBean;
+import bean.UserGroupBean;
 import bean.UserInfoBean;
 import data.UserData;
 import net.sf.json.JSONObject;
@@ -78,7 +79,7 @@ public class ChatServer {
 				}
 			}).start();
 			// 用于服务器推送消息给用户
-			 getMessage();
+			getMessage();
 			// 从客户端获取信息
 			BufferedReader bff = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			// 读取发来服务器信息
@@ -95,7 +96,7 @@ public class ChatServer {
 					// 实体类存入数据库，socket存入内存中，都以用户id作为参照
 					setChatMap(messageBean, socket);
 					// 将用户发送进来的消息转发给目标好友
-					getFriend(messageBean);
+					getChatStyle(messageBean);
 					System.out.println("用户 : " + userMap.get(messageBean.getUserId()).getUserName());
 					System.out.println("内容 : " + messageBean.getContent());
 				}
@@ -155,14 +156,32 @@ public class ChatServer {
 		}
 	}
 
-	
-
 	/**
 	 * 将消息转发给目标好友
 	 * 
 	 * @param messageBean
 	 */
-	private void getFriend(MessageBean messageBean) {
+	private void getChatStyle(MessageBean messageBean) {
+		switch (messageBean.getChatStyle()) {
+		case 0:// 普通消息
+			getFriendChat(messageBean);
+			break;
+		case 1:// 群消息
+			getGroupChat(messageBean);
+			break;
+		case 3:// ，系统推送消息；
+			break;
+		case 4:// ，好友通知消息
+			break;
+		}
+	}
+
+	/**
+	 * 发送给好友的普通消息
+	 * 
+	 * @param messageBean
+	 */
+	private void getFriendChat(MessageBean messageBean) {
 		if (socketMap != null && socketMap.get(messageBean.getFriendId()) != null) {
 			Socket socket = socketMap.get(messageBean.getFriendId());
 			String buffer = gson.toJson(messageBean);
@@ -177,6 +196,43 @@ public class ChatServer {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * 发送群聊消息
+	 * 
+	 * @param messageBean
+	 */
+	private void getGroupChat(MessageBean messageBean) {
+		if (userMap == null)
+			return;
+		// 遍历每一个在线用户，便利出他们的群集合
+		for (UserInfoBean userInfoBean : userMap.values()) {
+			// 在每个用户的群集合中查找该条消息的目标群id
+			for (UserGroupBean userGroupBean : userInfoBean.getGroupList()) {
+				// 说明该用户拥有这个群，则向这个用户发送这条群消息
+				if (userGroupBean.getGroupId() == messageBean.getGroupId()) {
+					// 如果当前socket集合中查找到了该用户的id，说明该用户在线，则发送该条群消息;并且过滤掉发送群消息本人；
+					if (socketMap != null && socketMap.get(userInfoBean.getUserId()) != null
+							&& userInfoBean.getUserId() != messageBean.getUserId()) {
+						Socket socket = socketMap.get(userInfoBean.getUserId());
+						String buffer = gson.toJson(messageBean);
+						// 因为readLine以换行符为结束点所以，结尾加入换行
+						buffer += "\n";
+						try {
+							// 向客户端发送信息
+							OutputStream output = socket.getOutputStream();
+							output.write(buffer.getBytes("utf-8"));
+							// 发送数据
+							output.flush();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
 			}
 		}
 	}

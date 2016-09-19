@@ -1,11 +1,14 @@
 package bean;
 
+import java.io.Serializable;
+
 /**
  * 用户的群管理
  * @author Luhao
  *
  */
-public class UserGroupBean {
+public class UserGroupBean implements Serializable {
+	private static final long serialVersionUID = 3L;
 	private int groupId;//群id
 	private int userId;//用户id
 	private int groupNumberByMax;//总人数

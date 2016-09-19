@@ -23,6 +23,10 @@ public class UserData {
 		return userInfoBean;
 	}
 
+	
+	/**每个用户模拟两个群
+	 * @return
+	 */
 	private static List<UserGroupBean> getUserGroup() {
 		List<UserGroupBean> list = new ArrayList<>();
 		for (int i = 1; i <= 2; i++) {
