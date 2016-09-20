@@ -208,7 +208,7 @@ public class ChatServer {
 	private void getGroupChat(MessageBean messageBean) {
 		if (userMap == null)
 			return;
-		// 遍历每一个在线用户，便利出他们的群集合
+		// 遍历每一个在线用户，遍历出他们的群集合
 		for (UserInfoBean userInfoBean : userMap.values()) {
 			// 在每个用户的群集合中查找该条消息的目标群id
 			for (UserGroupBean userGroupBean : userInfoBean.getGroupList()) {
