@@ -5,7 +5,7 @@ import java.util.List;
 
 public class UserInfoBean implements Serializable {
 	private static final long serialVersionUID = 2L;
-	private long userId;// 用户id
+	private int userId;// 用户id
 	private String userName;// 用户名
 	private String likeName;// 昵称
 	private String userPwd;// 用户密码
@@ -21,11 +21,11 @@ public class UserInfoBean implements Serializable {
 		this.groupList = groupList;
 	}
 
-	public long getUserId() {
+	public int getUserId() {
 		return userId;
 	}
 
-	public void setUserId(long userId) {
+	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 

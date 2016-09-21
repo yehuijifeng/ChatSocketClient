@@ -15,6 +15,8 @@ public class MessageBean implements Serializable {
 	private int friendId;//目标好友id
 	private MessageFileBean chatFile;// 消息附件
 	
+	//忽略
+	
 	
 	public int getChatStyle() {
 		return chatStyle;

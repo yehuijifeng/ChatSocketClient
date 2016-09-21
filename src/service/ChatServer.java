@@ -182,6 +182,9 @@ public class ChatServer {
 	 * @param messageBean
 	 */
 	private void getFriendChat(MessageBean messageBean) {
+		// 如果聊天内容是该内容，则表示这是一个用户上线信息，不需要发送给其他用户
+		if (messageBean.getContent().equals("[USER_LOGIN]"))
+			return;
 		if (socketMap != null && socketMap.get(messageBean.getFriendId()) != null) {
 			Socket socket = socketMap.get(messageBean.getFriendId());
 			String buffer = gson.toJson(messageBean);
@@ -206,6 +209,9 @@ public class ChatServer {
 	 * @param messageBean
 	 */
 	private void getGroupChat(MessageBean messageBean) {
+		// 如果聊天内容是该内容，则表示这是一个用户上线信息，不需要发送给其他用户
+		if (messageBean.getContent().equals("[USER_LOGIN]"))
+			return;
 		if (userMap == null)
 			return;
 		// 遍历每一个在线用户，遍历出他们的群集合
