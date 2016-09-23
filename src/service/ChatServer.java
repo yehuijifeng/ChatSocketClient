@@ -1,5 +1,6 @@
 package service;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -85,38 +86,20 @@ public class ChatServer {
 			BufferedReader bff = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			// 读取发来服务器信息
 			String line = null;
-			// 通过字节流的方式1M为一个单位来读取数据
-			ChatFileServer chatFileServer = new ChatFileServer();
 			// 循环一直接收当前socket发来的消息
 			while (true) {
 				Thread.sleep(500);
-				// System.out.println("内容 : " + bff.readLine());
 				// 获取客户端的信息
 				while ((line = bff.readLine()) != null) {
-					MessageBean messageBean = chatFileServer.receiveFile(socket);
-					if (messageBean == null)
-						break;
-					if (messageBean.getChatType() == 4) {
-						// 说明是文件类型的消息
-						MessageFileBean messageFileBean = messageBean.getChatFile();
-						System.out.println("文件名：" + messageFileBean.getFileName());
-						System.out.println("文件长度：" + messageFileBean.getFileLength());
-						System.out.println("文件类型：" + messageFileBean.getFileType());
-						System.out.println("用文件名：" + messageFileBean.getFileName());
-						System.out.println(
-								"文件保存" + (chatFileServer.setFile(messageFileBean.getFileByte()) ? "成功" : "失败"));
-					}
-					// // 解析实体类
-					// MessageBean messageBean = gson.fromJson(line,
-					// MessageBean.class);
-					// // 将用户信息添加进入map中，模仿添加进数据库和内存
-					// // 实体类存入数据库，socket存入内存中，都以用户id作为参照
-					// setChatMap(messageBean, socket);
-					// // 将用户发送进来的消息转发给目标好友
-					// getChatStyle(messageBean);
-					// System.out.println("用户 : " +
-					// userMap.get(messageBean.getUserId()).getUserName());
-					// System.out.println("内容 : " + messageBean.getContent());
+					// 解析实体类
+					MessageBean messageBean = gson.fromJson(line, MessageBean.class);
+					// 将用户信息添加进入map中，模仿添加进数据库和内存
+					// 实体类存入数据库，socket存入内存中，都以用户id作为参照
+					setChatMap(messageBean, socket);
+					// 将用户发送进来的消息转发给目标好友
+					getChatStyle(messageBean);
+					System.out.println("用户 : " + userMap.get(messageBean.getUserId()).getUserName());
+					System.out.println("内容 : " + messageBean.getContent());
 				}
 			}
 			// server.close();
